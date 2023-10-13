@@ -1,1 +1,22 @@
-{}
+{
+    "name": "playerControl",
+    "maps": [
+        {
+            "name": "playerAction",
+            "id": "7387bd1c-6b1c-407b-a635-de42187e7f09",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Value",
+                    "id": "a8188160-11c2-44be-9b0c-ef935b3b9cf4",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": []
+        }
+    ],
+    "controlSchemes": []
+}

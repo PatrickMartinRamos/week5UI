@@ -22,9 +22,29 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
     {
         asset = InputActionAsset.FromJson(@"{
     ""name"": ""playerControl"",
-    ""maps"": [],
+    ""maps"": [
+        {
+            ""name"": ""playerAction"",
+            ""id"": ""7387bd1c-6b1c-407b-a635-de42187e7f09"",
+            ""actions"": [
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""Value"",
+                    ""id"": ""a8188160-11c2-44be-9b0c-ef935b3b9cf4"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": []
+        }
+    ],
     ""controlSchemes"": []
 }");
+        // playerAction
+        m_playerAction = asset.FindActionMap("playerAction", throwIfNotFound: true);
+        m_playerAction_Newaction = m_playerAction.FindAction("New action", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -81,5 +101,55 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
     public int FindBinding(InputBinding bindingMask, out InputAction action)
     {
         return asset.FindBinding(bindingMask, out action);
+    }
+
+    // playerAction
+    private readonly InputActionMap m_playerAction;
+    private List<IPlayerActionActions> m_PlayerActionActionsCallbackInterfaces = new List<IPlayerActionActions>();
+    private readonly InputAction m_playerAction_Newaction;
+    public struct PlayerActionActions
+    {
+        private @PlayerControl m_Wrapper;
+        public PlayerActionActions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Newaction => m_Wrapper.m_playerAction_Newaction;
+        public InputActionMap Get() { return m_Wrapper.m_playerAction; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerActionActions set) { return set.Get(); }
+        public void AddCallbacks(IPlayerActionActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PlayerActionActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PlayerActionActionsCallbackInterfaces.Add(instance);
+            @Newaction.started += instance.OnNewaction;
+            @Newaction.performed += instance.OnNewaction;
+            @Newaction.canceled += instance.OnNewaction;
+        }
+
+        private void UnregisterCallbacks(IPlayerActionActions instance)
+        {
+            @Newaction.started -= instance.OnNewaction;
+            @Newaction.performed -= instance.OnNewaction;
+            @Newaction.canceled -= instance.OnNewaction;
+        }
+
+        public void RemoveCallbacks(IPlayerActionActions instance)
+        {
+            if (m_Wrapper.m_PlayerActionActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IPlayerActionActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PlayerActionActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PlayerActionActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public PlayerActionActions @playerAction => new PlayerActionActions(this);
+    public interface IPlayerActionActions
+    {
+        void OnNewaction(InputAction.CallbackContext context);
     }
 }

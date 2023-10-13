@@ -7,6 +7,9 @@ public class buttonManager : MonoBehaviour
     public GameObject model;
     private Animator animator;
 
+    public GameObject spellEffect;
+    public Transform castPoint;
+
     // Start is called before the first frame update
 
     public void Start()
@@ -32,5 +35,12 @@ public class buttonManager : MonoBehaviour
     {
         animator.SetTrigger("spinAttack");
         Debug.Log("anime4");
+    }
+    public void castSpell()
+    {
+        animator.SetTrigger("spellCastRaise");
+        Instantiate(spellEffect, castPoint);
+
+        Debug.Log("castSpell");
     }
 }
