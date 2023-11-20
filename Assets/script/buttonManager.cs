@@ -99,7 +99,7 @@ public class buttonManager : MonoBehaviour
         if(isRotatingLeft) 
         {
           rotationModel_1 = model_1.transform.DOLocalRotate (Vector3.up, 5f * rotationSpeed * Time.deltaTime).SetLoops(-1, LoopType.Incremental).SetEase(Ease.Linear);
-          rotationModel_2 = model_2.transform.DOLocalRotate (Vector3.up, 5f * rotationSpeed * Time.deltaTime).SetLoops(-1, LoopType.Incremental).SetEase(Ease.Linear);
+          rotationModel_2 = model_2.transform.DOLocalRotate(Vector3.up, 5f * rotationSpeed * Time.deltaTime).SetLoops(-1, LoopType.Incremental).SetEase(Ease.Linear);
         }
     }
 
